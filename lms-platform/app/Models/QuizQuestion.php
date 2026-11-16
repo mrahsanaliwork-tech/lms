@@ -1,0 +1,43 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+
+class QuizQuestion extends Model
+{
+    use HasFactory;
+
+    protected $fillable = [
+        'quiz_id',
+        'question',
+        'type',
+        'options',
+        'correct_answer',
+        'marks',
+        'explanation',
+    ];
+
+    protected function casts(): array
+    {
+        return [
+            'options' => 'array',
+        ];
+    }
+
+    // ── Relationships ──────────────────────────────────────────────
+
+    public function quiz(): BelongsTo
+    {
+        return $this->belongsTo(Quiz::class);
+    }
+
+    // ── Scopes ─────────────────────────────────────────────────────
+
+    public function scopeByType($query, string $type)
+    {
+        return $query->where('type', $type);
+    }
+}
